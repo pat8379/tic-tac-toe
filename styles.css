@@ -52,6 +52,11 @@ main {
 
 .header-box h1, .header-box h3 {
     color: white;
+    display: inline;
+}
+
+.header-box h1 {
+    margin-right: 10px;
 }
 
 .header-box h1 {
@@ -68,6 +73,27 @@ main {
     color: white;
 }
 
+.difficulty {
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.difficulty:last-child {
+    margin-right: 0;
+}
+
+.impos-activated {
+    background-color: rgb(255, 49, 49);
+    color: white;
+}
+
+.med-activated {
+    background-color: yellow;
+}
+
+.jep-activated {
+    background-color: rgb(106, 183, 255);
+}
 .container {
     display: grid;
     /* border: 1px solid white; */
@@ -198,7 +224,7 @@ footer {
     margin-bottom: 40px;
 }
 
-.restart {
+.restart, .difficulty {
     padding: 10px 12px;
     font-size: 1.2rem;
     border-radius: 8px;
