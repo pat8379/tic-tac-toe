@@ -7,8 +7,6 @@
     /* overflow: hidden; */
     font-family: 'Poppins',sans-serif;
 }
-
-
   
 body {
     /* background: rgb(0,0,0); */
@@ -17,7 +15,6 @@ body {
     background: linear-gradient(180deg, rgba(0,0,0,1) 22%, rgba(37,37,37,1) 100%);
     background-repeat: no-repeat;
     min-height: 100vh;
-
 }
 
 header {
@@ -34,6 +31,11 @@ main {
     align-items: center;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 @keyframes scale-in-center {
     0% {
       transform: scale(0);
@@ -44,7 +46,6 @@ main {
       opacity: 1;
     }
   }
-
 
 .header-box {
     text-align: center;
@@ -85,20 +86,24 @@ main {
 .impos-activated {
     background-color: rgb(255, 49, 49);
     color: white;
+    transition: 0.3s;
 }
 
 .med-activated {
     background-color: yellow;
+    transition: 0.3s;
 }
 
 .jep-activated {
     background-color: rgb(106, 183, 255);
+    transition: 0.3s;
 }
 .container {
     display: grid;
     /* border: 1px solid white; */
     margin-top: 40px;
     width: 400px;
+    /* width: 300px; */
     /* row-gap: 4px; */
     grid-template-columns: repeat(3, 1fr);
     /* grid-template-rows: repeat(3, 1fr); */
@@ -126,8 +131,24 @@ main {
     transition: 0.5s;
 }
 
+.box.draw {
+    background-color: rgba(139, 139, 139, 0.5);
+    transition: 0.5s;
+}
+
 .box i {
     position: absolute;
+    /* border: 1px solid white ; */
+}
+
+.george {
+    /* border: 1px solid wheat; */
+    background-image: url('./resources/jorj_face_4.jpg');
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    background-size: 100% auto;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .fa-circle {
