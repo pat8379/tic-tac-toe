@@ -22,6 +22,11 @@ let win = [
     [2, 4, 6]
 ]
 
+let diagonalBoxes = [[0,4,8],[2,4,6]]
+let crossBoxes = [[1,4,7],[3,4,5]]
+let corners = [0,2,6,8]
+let middies = [1,7,5,3]
+
 let botCollected = []
 let playerCollected = []
 
@@ -39,7 +44,6 @@ let wonArrays = win.some(combination => {
 })
 
 let georgeStatus = true
-let firstTimeActivated = false
 let y
 
 const restartGame = () => {
@@ -146,69 +150,6 @@ const botAdd = (number) => {
   
 let difficultyStatus = ''
 
-const everyThing = () => {
-    if (win.some(combination => {
-        return combination.every(index => botCollected.includes(index))
-    })) {
-        console.log('bot wins');
-        findWin(botCollected)
-        won[0].forEach(winBoxes => container.children.item(winBoxes).classList.add('lost'))
-        return
-    }
-    let x = Array.prototype.indexOf.call(container.children,cell)
-    const pos = arr.indexOf(x)
-    if (pos !== -1 && (count%2===0)) {
-        container.children.item(x).children.item(0).classList.add(svgIcon)
-        playerCollected.push(x)
-        arr.splice(pos, 1)
-        console.log('done ' + x + ' ' + arr);
-        count++  
-        // -------------------- test
-        if (gameDifficulty === 'georgeDif') {
-            y = arr[Math.floor(Math.random()*arr.length)]
-        } else if (gameDifficulty === 'mediumDif') {
-            let winTg = oneTriggerAway('win the game')
-            let defTg = oneTriggerAway('defend')
-            if (winTg !== undefined) {
-                y = winTg
-                console.log('bot tries to win');
-            } else if (defTg !== undefined) {
-                y = defTg
-                console.log('bot tries to defend');
-            } else if (defTg === undefined){
-                y = arr[Math.floor(Math.random()*arr.length)]
-                console.log('bot randoms 1');
-            } 
-        }
-        // -------------------- test
-        xTriggered++
-    } 
-    if (win.some(combination => {
-        return combination.every(index => playerCollected.includes(index))
-    })) {
-        console.log('player wins');
-        findWin(playerCollected)
-        won[0].forEach(winBoxes => container.children.item(winBoxes).classList.add('won'))
-        return
-    } else if (xTriggered === 5 && won.length === 0) {
-        box.forEach(cells => {
-            cells.classList.add('draw')
-        })
-        return
-    }
-
-    // console.log('this is y= '+ y);
-    setTimeout(() => {
-        if (count % 2 !== 0 && arr.length>= 1) {
-            botAdd(y)
-            count++
-            // console.log(y + ' is y and ' + arr);
-            console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
-
-        };        
-    }, 200)
-}
-
 const startGame = gameDifficulty => {
     box.forEach(cell => {
         cell.addEventListener('click', function everyThing(){
@@ -223,12 +164,14 @@ const startGame = gameDifficulty => {
             let x = Array.prototype.indexOf.call(container.children,cell)
             const pos = arr.indexOf(x)
             if (pos !== -1 && (count%2===0)) {
+                xTriggered++
                 container.children.item(x).children.item(0).classList.add(svgIcon)
                 playerCollected.push(x)
                 arr.splice(pos, 1)
                 console.log('done ' + x + ' ' + arr);
+                // console.log(xTriggered);
                 count++  
-                // -------------------- test
+                // -------------------- algorithm
                 if (gameDifficulty === 'georgeDif') {
                     y = arr[Math.floor(Math.random()*arr.length)]
                 } else if (gameDifficulty === 'mediumDif') {
@@ -244,9 +187,51 @@ const startGame = gameDifficulty => {
                         y = arr[Math.floor(Math.random()*arr.length)]
                         console.log('bot randoms 1');
                     } 
+                } else if (gameDifficulty === 'impoDif') {
+                    if (xTriggered === 1){
+                        if (x === 4) {
+                            y = 2
+                        } else {
+                            y = 4
+                        }
+                    } else if (xTriggered === 2){
+                        let defTg2 = oneTriggerAway('defend')
+                        if (defTg2 !== undefined){
+                            y = defTg2
+                            console.log('bot defends impo');
+                        } else if (corners.includes(playerCollected[0])){
+                            if(middies.includes(x)){
+                                y = middies[(middies.indexOf(x) + 2) % 4]
+                            } else if (corners.includes(x)){
+                                y = middies[Math.floor(Math.random()*middies.length)]
+                            }
+                        } else if (middies.includes(playerCollected[0])){
+                            if (middies.includes(x)){ // middies usage is questionable
+                                y = corners[Math.floor(Math.random()*corners.length)]
+                            } else if (corners.includes(x)){
+                                if (playerCollected[0] === 1 || playerCollected[0] === 7 ){
+                                    y = 3
+                                } else if (playerCollected[0]===3 || playerCollected[0]===5){
+                                    y = 7
+                                }
+                            }
+                        }
+                    } else if (xTriggered > 2) {
+                        let winTg3 = oneTriggerAway('win the game')
+                        let defTg3 = oneTriggerAway('defend')
+                        if (winTg3 !== undefined) {
+                            y = winTg3
+                            console.log('bot tries to win');
+                        } else if (defTg3 !== undefined) {
+                            y = defTg3
+                            console.log('bot tries to defend');
+                        } else if (defTg3 === undefined){
+                            y = arr[Math.floor(Math.random()*arr.length)]
+                            console.log('bot randoms 1');
+                        }    
+                    }
                 }
-                // -------------------- test
-                xTriggered++
+                // -------------------- algorithm
             } 
             if (win.some(combination => {
                 return combination.every(index => playerCollected.includes(index))
@@ -263,15 +248,27 @@ const startGame = gameDifficulty => {
             }
         
             // console.log('this is y= '+ y);
-            setTimeout(() => {
-                if (count % 2 !== 0 && arr.length>= 1) {
-                    botAdd(y)
-                    count++
-                    // console.log(y + ' is y and ' + arr);
-                    console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
-        
-                };        
-            }, 200)
+            if (difficultyStatus === 'jepai'){
+                setTimeout(() => {
+                    if (count % 2 !== 0 && arr.length>= 1) {
+                        botAdd(y)
+                        count++
+                        // console.log(y + ' is y and ' + arr);
+                        // console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
+                        console.log('jepai');
+                    };        
+                }, 200)
+            } else {
+                setTimeout(() => {
+                    if (count % 2 !== 0 && arr.length>= 1) {
+                        botAdd(y)
+                        count++
+                        // console.log(y + ' is y and ' + arr);
+                        // console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
+                        console.log('not jepai');
+                    };        
+                }, 200)
+            }
         })
     })
 };
@@ -280,7 +277,6 @@ const startGame = gameDifficulty => {
 
 jepai.onclick = () => {
     if (difficultyStatus !== 'jepai') {
-        firstTimeActivated = true
         // box.forEach(cell => {
         //     cell.removeEventListener('click', everyThing)
         // })
@@ -302,7 +298,6 @@ jepai.onclick = () => {
 
 medium.onclick = () => {
     if (difficultyStatus !== 'medium') {
-        firstTimeActivated = true
         // box.forEach(cell => {
         //     cell.removeEventListener('click', everyThing)
         // })
@@ -323,13 +318,12 @@ medium.onclick = () => {
 
 impossible.onclick = () => {
     if (difficultyStatus !== 'impossible') {
-        firstTimeActivated = true
         // box.forEach(cell => {
         //     cell.removeEventListener('click', everyThing)
         // })
         restartGame()
         // georgeStatus = 'impossibleRed'
-        // startGame()
+        startGame('impoDif')
         difficultyStatus = 'impossible'
         impossible.classList.add('impos-activated')
         if (jepai.classList.contains('jep-activated')){
