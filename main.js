@@ -146,8 +146,14 @@ const botAdd = (number) => {
     botCollected.push(number)
     pis = arr.indexOf(number)
     arr.splice(pis,1)
-  };
-  
+};
+
+const georgeAdd = number1 => {
+
+    botCollected.push(number1)
+    pis = arr.indexOf(number1)
+    arr.splice(pis,1)
+}
 let difficultyStatus = ''
 
 const startGame = gameDifficulty => {
