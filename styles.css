@@ -173,6 +173,22 @@ a {
     stroke-width: 1;
 }
 
+img {
+    display: none;
+}
+
+.george-pic {
+    object-fit: cover;
+    width: 60%;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    border: 2px solid white;
+    position: absolute;
+    /* z-index: -1; */
+    display: block;
+    animation: scale-in-center 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
+}
+
 #b1 {
     border-right: 4px solid white;
     border-bottom: 4px solid white;
@@ -240,6 +256,7 @@ a {
 footer {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     margin-top: 40px;
     margin-bottom: 40px;
@@ -256,4 +273,14 @@ footer {
 
 .restart:active {
     background-color: rgb(95, 95, 95);
+}
+
+footer span {
+    color: white;
+    margin-top: 10px;
+}
+
+footer span a {
+    color: #3366BB;
+    text-decoration: underline;
 }

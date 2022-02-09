@@ -60,6 +60,9 @@ const restartGame = () => {
         if (cell.children.item(0).classList.contains(svgIcon)) {
             cell.children.item(0).classList.remove(svgIcon);
         }
+        if (cell.children.item(2).classList.contains('george-pic')){
+            cell.children.item(2).classList.remove('george-pic')
+        }
         if (cell.classList.contains(winClass)) {
             cell.classList.remove(winClass)
         }
@@ -116,7 +119,6 @@ const oneTriggerAway = purpose => {
                     if (win[u][j] === playerCollected[i] && !decision.includes(playerCollected[i])) {
                         decision.push(playerCollected[i])
                     }
-
                     if (decision.every(indexing => win[u].includes(indexing)) && decision.length === 2) {
                         win[u].forEach(nuios => {
                             if (!decision.includes(nuios)){
@@ -149,7 +151,7 @@ const botAdd = (number) => {
 };
 
 const georgeAdd = number1 => {
-
+    container.children.item(y).children.item(2).classList.add('george-pic')
     botCollected.push(number1)
     pis = arr.indexOf(number1)
     arr.splice(pis,1)
@@ -257,7 +259,7 @@ const startGame = gameDifficulty => {
             if (difficultyStatus === 'jepai'){
                 setTimeout(() => {
                     if (count % 2 !== 0 && arr.length>= 1) {
-                        botAdd(y)
+                        georgeAdd(y)
                         count++
                         // console.log(y + ' is y and ' + arr);
                         // console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
