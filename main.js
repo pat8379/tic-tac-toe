@@ -312,8 +312,8 @@ medium.onclick = () => {
         // georgeStatus = false
         restartGame()
         // georgeStatus = 'mediumYellow'
-        startGame('mediumDif')
         difficultyStatus = 'medium'
+        startGame('mediumDif')
         medium.classList.add('med-activated')
         if (impossible.classList.contains('impos-activated')){
             impossible.classList.remove('impos-activated')
@@ -331,8 +331,8 @@ impossible.onclick = () => {
         // })
         restartGame()
         // georgeStatus = 'impossibleRed'
-        startGame('impoDif')
         difficultyStatus = 'impossible'
+        startGame('impoDif')
         impossible.classList.add('impos-activated')
         if (jepai.classList.contains('jep-activated')){
             jepai.classList.remove('jep-activated')
