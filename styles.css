@@ -4,20 +4,15 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    /* overflow: hidden; */
     font-family: 'Poppins',sans-serif;
+    overflow-x: hidden;
 }
-
-
   
 body {
-    /* background: rgb(0,0,0); */
-    /* background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(37,37,37,1) 47%, rgba(117,117,117,1) 95%, rgba(135,135,135,1) 100%); */
     background: rgb(0,0,0);
     background: linear-gradient(180deg, rgba(0,0,0,1) 22%, rgba(37,37,37,1) 100%);
     background-repeat: no-repeat;
     min-height: 100vh;
-
 }
 
 header {
@@ -34,6 +29,11 @@ main {
     align-items: center;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 @keyframes scale-in-center {
     0% {
       transform: scale(0);
@@ -45,28 +45,19 @@ main {
     }
   }
 
-
 .header-box {
     text-align: center;
-}
-
-.header-box h1, .header-box h3 {
-    color: white;
-    display: inline;
-}
-
-.header-box h1 {
-    margin-right: 10px;
 }
 
 .header-box h1 {
     font-family: 'Walter Turncoat',serif;
     font-size: 2.5rem;
+    color: white;
+    display: inline;
 }
 
 .sub-text {
     text-align: center;
-    margin-top: 10px;
 }
 
 .sub-text span {
@@ -85,28 +76,27 @@ main {
 .impos-activated {
     background-color: rgb(255, 49, 49);
     color: white;
+    transition: 0.3s;
 }
 
 .med-activated {
     background-color: yellow;
+    transition: 0.3s;
 }
 
 .jep-activated {
     background-color: rgb(106, 183, 255);
+    transition: 0.3s;
 }
 .container {
     display: grid;
-    /* border: 1px solid white; */
     margin-top: 40px;
     width: 400px;
-    /* row-gap: 4px; */
     grid-template-columns: repeat(3, 1fr);
-    /* grid-template-rows: repeat(3, 1fr); */
+    overflow-x: hidden;
 }
 
 .box {
-    /* border: 4px solid white; */
-    /* width: 120px; */
     position: relative;
     aspect-ratio: 1;
     display: flex;
@@ -123,6 +113,11 @@ main {
 
 .box.lost {
     background-color: rgba(255, 38, 38, 0.5);
+    transition: 0.5s;
+}
+
+.box.draw {
+    background-color: rgba(139, 139, 139, 0.5);
     transition: 0.5s;
 }
 
@@ -152,73 +147,90 @@ main {
     stroke-width: 1;
 }
 
-#b1 {
-    border-right: 4px solid white;
-    border-bottom: 4px solid white;
-    border-top: 4px solid transparent;
-    border-left: 4px solid transparent;
+img {
+    display: none;
 }
 
-#b2 {
-    border-right: 4px solid white;
-    border-bottom: 4px solid white;
-    border-left: 4px solid white;
-    border-top: 4px solid transparent;
-
+.george-pic {
+    object-fit: cover;
+    width: 60%;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    border: 1px solid white;
+    position: absolute;
+    /* z-index: -1; */
+    display: block;
+    animation: scale-in-center 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) forwards;
 }
 
-#b3 {
-    border-bottom: 4px solid white;
-    border-left: 4px solid white;
-    border-top: 4px solid transparent;
-    border-right: 4px solid transparent;
+.b1 {
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-top: 3px solid transparent;
+    border-left: 3px solid transparent;
 }
 
-#b4 {
-    border-right: 4px solid white;
-    border-bottom: 4px solid white;
-    border-top: 4px solid white;
-    border-left: 4px solid transparent;
-
-}
-
-#b5 {
-    border: 4px solid white;;   
-}
-
-#b6 {
-    border-bottom: 4px solid white;
-    border-left: 4px solid white;
-    border-top: 4px solid white;
-    border-right: 4px solid transparent;
+.b2 {
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    border-top: 3px solid transparent;
 
 }
 
-#b7 {
-    border-top: 4px solid white;
-    border-right: 4px solid white;
-    border-left: 4px solid transparent;
-    border-bottom: 4px solid transparent;
+.b3 {
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    border-top: 3px solid transparent;
+    border-right: 3px solid transparent;
 }
 
-#b8 {
-    border-left: 4px solid white;
-    border-top: 4px solid white;
-    border-right: 4px solid white;
-    border-bottom: 4px solid transparent;
+.b4 {
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-top: 3px solid white;
+    border-left: 3px solid transparent;
 
 }
 
-#b9 {
-    border-left: 4px solid white;
-    border-top: 4px solid white;
-    border-bottom: 4px solid transparent;
-    border-right: 4px solid transparent;
+.b5 {
+    border: 3px solid white;;   
+}
+
+.b6 {
+    border-bottom: 3px solid white;
+    border-left: 3px solid white;
+    border-top: 3px solid white;
+    border-right: 3px solid transparent;
+
+}
+
+.b7 {
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    border-left: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+}
+
+.b8 {
+    border-left: 3px solid white;
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    border-bottom: 3px solid transparent;
+
+}
+
+.b9 {
+    border-left: 3px solid white;
+    border-top: 3px solid white;
+    border-bottom: 3px solid transparent;
+    border-right: 3px solid transparent;
 }
 
 footer {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     margin-top: 40px;
     margin-bottom: 40px;
@@ -235,4 +247,50 @@ footer {
 
 .restart:active {
     background-color: rgb(95, 95, 95);
+}
+
+footer span {
+    color: white;
+    margin-top: 10px;
+}
+
+footer span a {
+    color: #3366BB;
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 450px) {
+    .header-box h1 {
+        font-size: 2.2rem;
+    }
+
+    .sub-text span, footer span {
+        font-size: 14px;
+    }
+
+    .restart, .difficulty {
+        font-size: 15px;
+        padding: 5px 7px;
+    }
+
+    .container {
+        margin-top: 20px;
+        width: 300px;
+    }
+
+    .box {
+        font-size: 18px;
+    }
+
+    footer {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* .b1, .b2, .b3, .b4, .b5, .b6, .b7, .b8, .b9 {
+        border-left: 2px solid initial;
+        border-top: 2px solid initial;
+        border-bottom: 2px solid initial;
+        border-right: 2px solid initial;
+    } */
 }

@@ -1,11 +1,14 @@
 const container = document.querySelector('.container')
 const box = document.querySelectorAll('.box')
 const theIcon = document.querySelector('.the-icon')
-const svgIcon = 'svg-icon'
+let svgIcon = 'svg-icon'
 const faCircle = 'fa-circle'
 const restart = document.getElementById('restart')
 const winClass = 'won'
 const loseClass = 'lost'
+const jepai = document.getElementById('jepai')
+const medium = document.getElementById('medium')
+const impossible = document.getElementById('impossible')
 
 let arr = [0,1,2,3,4,5,6,7,8]
 let win = [
@@ -19,19 +22,31 @@ let win = [
     [2, 4, 6]
 ]
 
+let diagonalBoxes = [[0,4,8],[2,4,6]]
+let crossBoxes = [[1,4,7],[3,4,5]]
+let corners = [0,2,6,8]
+let middies = [1,7,5,3]
+
 let botCollected = []
 let playerCollected = []
 
-let u = 0;
+let count = 0;
 let pis; 
 let won = [];
+let xTriggered = 0;
+let cell
+let gameDifficulty
+
 
 let wonArrays = win.some(combination => {
     return combination.every(index => playerCollected.includes(index))
 })
 
-restart.onclick = () => {
-    u = 0
+let y
+
+const restartGame = () => {
+    count = 0
+    xTriggered = 0
     won = []
     arr = [0,1,2,3,4,5,6,7,8]
     botCollected = []
@@ -43,34 +58,108 @@ restart.onclick = () => {
         if (cell.children.item(0).classList.contains(svgIcon)) {
             cell.children.item(0).classList.remove(svgIcon);
         }
+        if (cell.children.item(2).classList.contains('george-pic')){
+            cell.children.item(2).classList.remove('george-pic')
+        }
         if (cell.classList.contains(winClass)) {
             cell.classList.remove(winClass)
         }
         if (cell.classList.contains(loseClass)) {
             cell.classList.remove(loseClass)
         }
+        if (cell.classList.contains('draw')) {
+            cell.classList.remove('draw')
+        }
     })
-    console.log(`${won} and ${u}`);
-}
-
-const botAdd = (number) => {
-  container.children.item(number).children.item(1).classList.add(faCircle);
-  botCollected.push(number)
-  pis = arr.indexOf(number)
-  arr.splice(pis,1)
 };
 
 const findWin = arrayP => {
-    for (i=0; i<win.length; i++){
-      if (win[i].every(index => arrayP.includes(index))) {
-          won.push(win[i])
-      }
+    for (ifwin=0; ifwin<win.length; ifwin++){
+    if (win[ifwin].every(index => arrayP.includes(index))) {
+        won.push(win[ifwin])
+    }
     };
 };
 
-const startRandomGame = () => {
+const oneTriggerAway = purpose => {
+    let decision = []
+    let finalDecision;
+    if (purpose === 'win the game'){
+        for (u = 0; u < win.length; u++){ 
+            for (j = 0; j < win[u].length; j++){ 
+                for (i = 0; i < botCollected.length; i++){ 
+                    if (win[u][j] === botCollected[i] && !decision.includes(botCollected[i])) {
+                        decision.push(botCollected[i])
+                    }
+                    if (decision.every(indexing => win[u].includes(indexing)) && decision.length === 2) {
+                        win[u].forEach(nuios => {
+                            if (!decision.includes(nuios)){
+                                finalDecision = nuios
+                            }
+                        })
+                        decision = []
+                        if (finalDecision !== undefined && arr.includes(finalDecision)){
+                            return finalDecision
+                        } else {
+                            continue
+                        }
+                    } 
+                };
+            }
+            decision = []
+        };
+    } else if (purpose === 'defend'){
+        for (u = 0; u < win.length; u++){ 
+            for (j = 0; j < win[u].length; j++){ 
+                for (i = 0; i < playerCollected.length; i++){ 
+                    if (win[u][j] === playerCollected[i] && !decision.includes(playerCollected[i])) {
+                        decision.push(playerCollected[i])
+                    }
+                    if (decision.every(indexing => win[u].includes(indexing)) && decision.length === 2) {
+                        win[u].forEach(nuios => {
+                            if (!decision.includes(nuios)){
+                                finalDecision = nuios
+                            }
+                        })
+                        decision = []
+                        if (finalDecision !== undefined && arr.includes(finalDecision)){
+                            return finalDecision
+                        } else {
+                            continue
+                        }
+                    }
+                };
+            }
+            decision = []
+        };
+    }
+};
+
+const botAdd = (number) => {
+    container.children.item(y).children.item(1).classList.add(faCircle);
+    botCollected.push(number)
+    pis = arr.indexOf(number)
+    arr.splice(pis,1)
+};
+
+const georgeAdd = number1 => {
+    container.children.item(y).children.item(2).classList.add('george-pic')
+    botCollected.push(number1)
+    pis = arr.indexOf(number1)
+    arr.splice(pis,1)
+}
+let difficultyStatus = ''
+let pressedX
+
+box.forEach(cels => {
+    cels.addEventListener('click', function indexerFunction(){
+        pressedX = Array.prototype.indexOf.call(container.children,cels)
+    })
+})
+
+const startGame = () => {
     box.forEach(cell => {
-        cell.addEventListener('click', function() {
+        cell.addEventListener('click', function everyThing(){
             if (win.some(combination => {
                 return combination.every(index => botCollected.includes(index))
             })) {
@@ -79,16 +168,79 @@ const startRandomGame = () => {
                 won[0].forEach(winBoxes => container.children.item(winBoxes).classList.add('lost'))
                 return
             }
-            let y
-            let x = Array.prototype.indexOf.call(container.children,cell)
+            let x = pressedX
             const pos = arr.indexOf(x)
-            if (pos !== -1 && (u%2===0)) {
+            if (pos !== -1 && (count%2===0)) {
+                xTriggered++
                 container.children.item(x).children.item(0).classList.add(svgIcon)
                 playerCollected.push(x)
                 arr.splice(pos, 1)
                 console.log('done ' + x + ' ' + arr);
-                u++  
-                y = arr[Math.floor(Math.random()*arr.length)]
+                count++  
+
+                // ------------------------ algorithm
+
+                if (gameDifficulty === 'georgeDif') {
+                    y = arr[Math.floor(Math.random()*arr.length)]
+                } else if (gameDifficulty === 'mediumDif') {
+                    let winTg = oneTriggerAway('win the game')
+                    let defTg = oneTriggerAway('defend')
+                    if (winTg !== undefined) {
+                        y = winTg
+                        console.log('bot tries to win');
+                    } else if (defTg !== undefined) {
+                        y = defTg
+                        console.log('bot tries to defend');
+                    } else if (defTg === undefined){
+                        y = arr[Math.floor(Math.random()*arr.length)]
+                        console.log('bot randoms 1');
+                    } 
+                } else if (gameDifficulty === 'impoDif') {
+                    if (xTriggered === 1){
+                        if (x === 4) {
+                            y = 2
+                        } else {
+                            y = 4
+                        }
+                    } else if (xTriggered === 2){
+                        let defTg2 = oneTriggerAway('defend')
+                        if (defTg2 !== undefined){
+                            y = defTg2
+                            console.log('bot defends impo');
+                        } else if (corners.includes(playerCollected[0])){
+                            if(middies.includes(x)){
+                                y = middies[(middies.indexOf(x) + 2) % 4]
+                            } else if (corners.includes(x)){
+                                y = middies[Math.floor(Math.random()*middies.length)]
+                            }
+                        } else if (middies.includes(playerCollected[0])){
+                            if (middies.includes(x)){ // middies usage is questionable
+                                y = corners[Math.floor(Math.random()*corners.length)]
+                            } else if (corners.includes(x)){
+                                if (playerCollected[0] === 1 || playerCollected[0] === 7 ){
+                                    y = 3
+                                } else if (playerCollected[0]===3 || playerCollected[0]===5){
+                                    y = 7
+                                }
+                            }
+                        }
+                    } else if (xTriggered > 2) {
+                        let winTg3 = oneTriggerAway('win the game')
+                        let defTg3 = oneTriggerAway('defend')
+                        if (winTg3 !== undefined) {
+                            y = winTg3
+                            console.log('bot tries to win');
+                        } else if (defTg3 !== undefined) {
+                            y = defTg3
+                            console.log('bot tries to defend');
+                        } else if (defTg3 === undefined){
+                            y = arr[Math.floor(Math.random()*arr.length)]
+                            console.log('bot randoms 1');
+                        }    
+                    }
+                }
+
+                // -------------------- algorithm
             } 
             if (win.some(combination => {
                 return combination.every(index => playerCollected.includes(index))
@@ -97,24 +249,88 @@ const startRandomGame = () => {
                 findWin(playerCollected)
                 won[0].forEach(winBoxes => container.children.item(winBoxes).classList.add('won'))
                 return
-            } 
-
-            // console.log('this is y= '+ y);
-            setTimeout(() => {
-                if (u % 2 !== 0 && arr.length>= 1) {
-                    botAdd(y)
-                    u++
-                    // console.log(y + ' is y and ' + arr);
-                };        
-            }, 200)
-            // console.log('amount of u is ' + u);
-            // console.log(`playerboxes are ${playerCollected}`);
-            // console.log(`botboxes are ${botCollected}`);
+            } else if (xTriggered === 5 && won.length === 0) {
+                box.forEach(cells => {
+                    cells.classList.add('draw')
+                })
+                return
+            }
+        
+            if (difficultyStatus === 'jepai'){
+                setTimeout(() => {
+                    if (count % 2 !== 0 && arr.length>= 1) {
+                        georgeAdd(y)
+                        count++
+                        console.log('jepai');
+                    };        
+                }, 200)
+            } else {
+                setTimeout(() => {
+                    if (count % 2 !== 0 && arr.length>= 1) {
+                        botAdd(y)
+                        count++
+                        console.log('not jepai');
+                    };        
+                }, 200)
+            }
         })
     })
 };
 
-startRandomGame()
 
-// container.childNodes[1].style.backgroundColor = 'red'
-// console.log(container.children.item(2).children.item(0));
+
+jepai.onclick = () => {
+    if (difficultyStatus !== 'jepai') {
+        restartGame()
+        gameDifficulty = 'georgeDif'
+        difficultyStatus = 'jepai'
+        startGame()
+        jepai.classList.add('jep-activated')
+        if (medium.classList.contains('med-activated')) {
+            medium.classList.remove('med-activated')
+        }
+        if (impossible.classList.contains('impos-activated')){
+            impossible.classList.remove('impos-activated')
+        }
+
+    }
+}
+
+medium.onclick = () => {
+    if (difficultyStatus !== 'medium') {
+        restartGame()
+        gameDifficulty = 'mediumDif'
+        difficultyStatus = 'medium'
+        startGame()
+        medium.classList.add('med-activated')
+        if (impossible.classList.contains('impos-activated')){
+            impossible.classList.remove('impos-activated')
+        }
+        if (jepai.classList.contains('jep-activated')){
+            jepai.classList.remove('jep-activated')
+        }
+    }
+}
+
+impossible.onclick = () => {
+    if (difficultyStatus !== 'impossible') {
+        restartGame()
+        gameDifficulty = 'impoDif'
+        difficultyStatus = 'impossible'
+        startGame()
+        impossible.classList.add('impos-activated')
+        if (jepai.classList.contains('jep-activated')){
+            jepai.classList.remove('jep-activated')
+        }
+        if (medium.classList.contains('med-activated')) {
+            medium.classList.remove('med-activated')
+        }
+
+    }
+}
+
+restart.onclick = () => {
+    restartGame()
+}
+
+
