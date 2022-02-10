@@ -30,20 +30,18 @@ let middies = [1,7,5,3]
 let botCollected = []
 let playerCollected = []
 
-// let yCond = '';
-
 let count = 0;
 let pis; 
 let won = [];
 let xTriggered = 0;
 let cell
+let gameDifficulty
 
 
 let wonArrays = win.some(combination => {
     return combination.every(index => playerCollected.includes(index))
 })
 
-let georgeStatus = true
 let y
 
 const restartGame = () => {
@@ -73,7 +71,6 @@ const restartGame = () => {
             cell.classList.remove('draw')
         }
     })
-    // console.log(`${won} and ${u} yay`);;
 };
 
 const findWin = arrayP => {
@@ -107,7 +104,6 @@ const oneTriggerAway = purpose => {
                             continue
                         }
                     } 
-                    // console.log(`${decision} is decision and ${win[u]} is current win pattern and ${j} is j`);
                 };
             }
             decision = []
@@ -132,8 +128,6 @@ const oneTriggerAway = purpose => {
                             continue
                         }
                     }
-                    // console.log(`${decision} is decision`);
-                    // console.log(`${decision} is decision and ${win[u]} is current win pattern and ${j} is j`);
                 };
             }
             decision = []
@@ -155,8 +149,15 @@ const georgeAdd = number1 => {
     arr.splice(pis,1)
 }
 let difficultyStatus = ''
+let pressedX
 
-const startGame = gameDifficulty => {
+box.forEach(cels => {
+    cels.addEventListener('click', function indexerFunction(){
+        pressedX = Array.prototype.indexOf.call(container.children,cels)
+    })
+})
+
+const startGame = () => {
     box.forEach(cell => {
         cell.addEventListener('click', function everyThing(){
             if (win.some(combination => {
@@ -167,7 +168,7 @@ const startGame = gameDifficulty => {
                 won[0].forEach(winBoxes => container.children.item(winBoxes).classList.add('lost'))
                 return
             }
-            let x = Array.prototype.indexOf.call(container.children,cell)
+            let x = pressedX
             const pos = arr.indexOf(x)
             if (pos !== -1 && (count%2===0)) {
                 xTriggered++
@@ -175,9 +176,10 @@ const startGame = gameDifficulty => {
                 playerCollected.push(x)
                 arr.splice(pos, 1)
                 console.log('done ' + x + ' ' + arr);
-                // console.log(xTriggered);
                 count++  
-                // -------------------- algorithm
+
+                // ------------------------ algorithm
+
                 if (gameDifficulty === 'georgeDif') {
                     y = arr[Math.floor(Math.random()*arr.length)]
                 } else if (gameDifficulty === 'mediumDif') {
@@ -237,6 +239,7 @@ const startGame = gameDifficulty => {
                         }    
                     }
                 }
+
                 // -------------------- algorithm
             } 
             if (win.some(combination => {
@@ -253,14 +256,11 @@ const startGame = gameDifficulty => {
                 return
             }
         
-            // console.log('this is y= '+ y);
             if (difficultyStatus === 'jepai'){
                 setTimeout(() => {
                     if (count % 2 !== 0 && arr.length>= 1) {
                         georgeAdd(y)
                         count++
-                        // console.log(y + ' is y and ' + arr);
-                        // console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
                         console.log('jepai');
                     };        
                 }, 200)
@@ -269,8 +269,6 @@ const startGame = gameDifficulty => {
                     if (count % 2 !== 0 && arr.length>= 1) {
                         botAdd(y)
                         count++
-                        // console.log(y + ' is y and ' + arr);
-                        // console.log(`${botCollected} is bot collected and ${playerCollected} is player collected`);
                         console.log('not jepai');
                     };        
                 }, 200)
@@ -283,14 +281,10 @@ const startGame = gameDifficulty => {
 
 jepai.onclick = () => {
     if (difficultyStatus !== 'jepai') {
-        // box.forEach(cell => {
-        //     cell.removeEventListener('click', everyThing)
-        // })
         restartGame()
-        // georgeStatus = 'george'
+        gameDifficulty = 'georgeDif'
         difficultyStatus = 'jepai'
-        // georgeStatus = true
-        startGame('georgeDif')
+        startGame()
         jepai.classList.add('jep-activated')
         if (medium.classList.contains('med-activated')) {
             medium.classList.remove('med-activated')
@@ -304,14 +298,10 @@ jepai.onclick = () => {
 
 medium.onclick = () => {
     if (difficultyStatus !== 'medium') {
-        // box.forEach(cell => {
-        //     cell.removeEventListener('click', everyThing)
-        // })
-        // georgeStatus = false
         restartGame()
-        // georgeStatus = 'mediumYellow'
+        gameDifficulty = 'mediumDif'
         difficultyStatus = 'medium'
-        startGame('mediumDif')
+        startGame()
         medium.classList.add('med-activated')
         if (impossible.classList.contains('impos-activated')){
             impossible.classList.remove('impos-activated')
@@ -324,13 +314,10 @@ medium.onclick = () => {
 
 impossible.onclick = () => {
     if (difficultyStatus !== 'impossible') {
-        // box.forEach(cell => {
-        //     cell.removeEventListener('click', everyThing)
-        // })
         restartGame()
-        // georgeStatus = 'impossibleRed'
+        gameDifficulty = 'impoDif'
         difficultyStatus = 'impossible'
-        startGame('impoDif')
+        startGame()
         impossible.classList.add('impos-activated')
         if (jepai.classList.contains('jep-activated')){
             jepai.classList.remove('jep-activated')
